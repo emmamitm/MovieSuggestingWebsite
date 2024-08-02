@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e0a7638-a40b-4ef3-9f85-10ab3f9e47ca" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/CSV.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CSV.py" afterDir="false" />
+    <list default="true" id="1e0a7638-a40b-4ef3-9f85-10ab3f9e47ca" name="Changes" comment="creating binary tree">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/User.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,14 +86,55 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722554943970</updated>
-      <workItem from="1722554949322" duration="1747000" />
+      <workItem from="1722554949322" duration="6441000" />
     </task>
+    <task id="LOCAL-00001" summary="working for print">
+      <option name="closed" value="true" />
+      <created>1722558778937</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1722558778937</updated>
+    </task>
+    <task id="LOCAL-00002" summary="working for print">
+      <option name="closed" value="true" />
+      <created>1722558829321</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1722558829321</updated>
+    </task>
+    <task id="LOCAL-00003" summary="creating binary tree">
+      <option name="closed" value="true" />
+      <created>1722559768286</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1722559768286</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="working for print" />
+    <MESSAGE value="creating binary tree" />
+    <option name="LAST_COMMIT_MESSAGE" value="creating binary tree" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/CSV.py</url>
+          <line>37</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/pythonProject5$main.coverage" NAME="main Coverage Results" MODIFIED="1722558745261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject5$main.coverage" NAME="main Coverage Results" MODIFIED="1722563497001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
