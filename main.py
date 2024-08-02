@@ -1,5 +1,8 @@
-from CSV import CSVReader, Movie
+
+from User import User, MoviesDB
 
 if __name__ == "__main__":
-    reader = CSVReader('CSV.csv')
-    reader.printMovies()
+    m = set()
+    user1 = User("CSV.csv", "action", 10, 5, 120, 90, 0, "h", m, m)
+    movie = MoviesDB(user1)
+
