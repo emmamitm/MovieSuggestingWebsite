@@ -1,0 +1,48 @@
+body {
+    background-color: black;
+    color: darkorange;
+}
+
+h1 {
+    color: darkorange;
+}
+
+.label-title {
+    color: darkorange;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.range-slider__label,
+.range-slider__mark {
+    color: darkorange;
+}
+
+.dropdown,
+input {
+    color: black;
+}
+
+.btn-primary {
+    background-color: darkorange;
+    border-color: darkorange;
+}
+
+.btn-primary:hover {
+    background-color: darkorange;
+    border-color: darkorange;
+}
+
+/* Custom styles for the range slider */
+.rc-slider-rail {
+    background-color: white !important;  /* Unselected part */
+}
+
+.rc-slider-track {
+    background-color: darkblue !important;  /* Selected part */
+}
+
+.rc-slider-handle {
+    border-color: darkblue !important;
+    background-color: darkblue !important;
+}
