@@ -1,7 +1,6 @@
 import csv
 from datetime import datetime
 
-
 class HashMap:
     def __init__(self, size=20):
         self.size = size
@@ -71,69 +70,63 @@ class HashMap:
                 self.insert(title, data)
                 count += 1
 
-    #############################################################################
-    # Fix this Method to use the HashMap data structure we created. We are not
-    # allowed to use an array for the filtering as this defeats the purpose of
-    # creating the HashMap. After this adjust the main method accordingly.
-    # I will comment where to adjust the main method.
-    #############################################################################
     def filter(self, filters_with_priorities):
-        # Start with all movies
-        results = []
-        for bucket in self.table:
-            for title, data in bucket:
-                results.append((title, data))
-
-        # Apply each filter in the order of priority
-        for filter_name, filter_value in filters_with_priorities:
+        def apply_filter(bucket, filter_name, filter_value):
             if filter_name == 'vote_average':
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if filter_value[0] <= float(data['vote_average']) <= filter_value[1]
                 ]
             elif filter_name == 'popularity':
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if filter_value[0] <= float(data['popularity']) <= filter_value[1]
                 ]
             elif filter_name == 'revenue':
-                results = [
-                    (title, data) for title, data in results
-                    if (filter_value[0]*1000000000) <= float(data['revenue']) <= (filter_value[1]*1000000000)
+                return [
+                    (title, data) for title, data in bucket
+                    if (filter_value[0] * 1000000000) <= float(data['revenue']) <= (filter_value[1] * 1000000000)
                 ]
             elif filter_name == 'runtime':
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if filter_value[0] <= float(data['runtime']) <= filter_value[1]
                 ]
             elif filter_name == 'genres' and len(filter_value) > 0:
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if filter_value[0].lower() in data['genres'].lower()
                 ]
             elif filter_name == 'keywords' and filter_value is not None:
                 filter_keywords = [kw.strip().lower() for kw in filter_value.split(',')]
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if any(kw in data['keywords'].lower() for kw in filter_keywords)
                 ]
             elif filter_name == 'production_countries' and len(filter_value) > 0:
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if filter_value[0].lower() in data['production_countries'].lower()
                 ]
             elif filter_name == 'original_language' and filter_value is not None:
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if filter_value[:2].lower() == data['original_language'].lower()
                 ]
             elif filter_name == "release_date":
                 start_year = int(filter_value[0])
                 end_year = int(filter_value[1])
-                results = [
-                    (title, data) for title, data in results
+                return [
+                    (title, data) for title, data in bucket
                     if 'release_date' in data and data['release_date']
                        and start_year <= datetime.strptime(data['release_date'], '%Y-%m-%d').year <= end_year
                 ]
+            return bucket
 
+        results = []
+        for bucket in self.table:
+            filtered_bucket = bucket
+            for filter_name, filter_value in filters_with_priorities:
+                filtered_bucket = apply_filter(filtered_bucket, filter_name, filter_value)
+            results.extend(filtered_bucket)
         return results
