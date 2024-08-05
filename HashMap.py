@@ -3,25 +3,20 @@ from datetime import datetime
 
 
 class HashMap:
-    def __init__(self, size=20, num_results=-1):
+    def __init__(self, size=20):
         self.size = size
-        self.num_results = num_results
         self.table = [[] for _ in range(size)]
-        self.count = 0  # Track the number of items inserted
 
     def _hash(self, key):
         return hash(key) % self.size
 
     def insert(self, key, data):
-        if self.count >= self.size:
-            return  # Prevent inserting more items than the size limit
         index = self._hash(key)
         for i, entry in enumerate(self.table[index]):
             if entry[0] == key:
                 self.table[index][i] = (key, data)
                 return
         self.table[index].append((key, data))
-        self.count += 1  # Increment the count of inserted items
 
     def search(self, key):
         index = self._hash(key)
@@ -35,14 +30,21 @@ class HashMap:
         for i, entry in enumerate(self.table[index]):
             if entry[0] == key:
                 del self.table[index][i]
-                self.count -= 1  # Decrement the count of inserted items
                 return
+
+    def print_hashmap(self):
+        for index, bucket in enumerate(self.table):
+            if bucket:
+                print(f"Bucket {index}:")
+                for key, value in bucket:
+                    print(f"  {key}: {value}")
 
     def read_csv_and_insert_into_hashmap(self, filepath):
         with open(filepath, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
+            count = 0
             for row in reader:
-                if self.count >= self.size:
+                if count >= self.size:
                     break  # Stop reading if the limit is reached
                 title = row['title']
                 data = {
@@ -67,9 +69,8 @@ class HashMap:
                     'keywords': row['keywords']
                 }
                 self.insert(title, data)
+                count += 1
 
-    # WE NEED TO CHANGE THIS TO USE A HASHMAP FOR FILTERING INSTEAD OF AN ARRAY
-    # SOMETIMES IT ERRORS OUT IF TOO MANY NDOES ARE ADDED
     def filter(self, filters_with_priorities):
         # Start with all movies
         results = []
@@ -79,9 +80,6 @@ class HashMap:
 
         # Apply each filter in the order of priority
         for filter_name, filter_value in filters_with_priorities:
-
-            previous_results = results.copy()
-
             if filter_name == 'vote_average':
                 results = [
                     (title, data) for title, data in results
@@ -102,26 +100,26 @@ class HashMap:
                     (title, data) for title, data in results
                     if filter_value[0] <= float(data['runtime']) <= filter_value[1]
                 ]
-            elif filter_name == 'genres':
+            elif filter_name == 'genres' and len(filter_value) > 0:
                 results = [
                     (title, data) for title, data in results
                     if filter_value[0].lower() in data['genres'].lower()
                 ]
             elif filter_name == 'keywords' and filter_value is not None:
-                    filter_keywords = [kw.strip().lower() for kw in filter_value[0].split(',')]
-                    results = [
-                        (title, data) for title, data in results
-                        if any(kw in data['keywords'].lower() for kw in filter_keywords)
-                    ]
-            elif filter_name == 'production_country':
+                filter_keywords = [kw.strip().lower() for kw in filter_value.split(',')]
+                results = [
+                    (title, data) for title, data in results
+                    if any(kw in data['keywords'].lower() for kw in filter_keywords)
+                ]
+            elif filter_name == 'production_countries' and len(filter_value) > 0:
                 results = [
                     (title, data) for title, data in results
                     if filter_value[0].lower() in data['production_countries'].lower()
                 ]
-            elif filter_name == 'original_language':
+            elif filter_name == 'original_language' and filter_value is not None:
                 results = [
                     (title, data) for title, data in results
-                    if filter_value[0][:2].lower() == data['original_language'].lower()
+                    if filter_value[:2].lower() == data['original_language'].lower()
                 ]
             elif filter_name == "release_date":
                 start_year = int(filter_value[0])
@@ -131,8 +129,5 @@ class HashMap:
                     if 'release_date' in data and data['release_date']
                        and start_year <= datetime.strptime(data['release_date'], '%Y-%m-%d').year <= end_year
                 ]
-
-            if len(results) < self.num_results:
-                return previous_results
 
         return results
