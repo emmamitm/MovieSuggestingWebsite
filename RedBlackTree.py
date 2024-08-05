@@ -243,6 +243,12 @@ class RedBlackTree:
                 self.insert(title, data)
                 count += 1
 
+    #############################################################################
+    # Fix this Method to use the RedBlackTree data structure we created. We are not
+    # allowed to use an array for the filtering as this defeats the purpose of
+    # creating the RedBlackTree. After this adjust the main method accordingly.
+    # I will comment where to adjust the main method.
+    #############################################################################
     def filter(self, filters_with_priorities):
         # Start with all movies
         results = []

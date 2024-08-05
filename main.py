@@ -191,19 +191,27 @@ def update_output(n_clicks, data_structure, original_language, original_language
         ]
         filters_sorted = sorted(filters, key=lambda x: x[2])
         priority_filters = [(filter[0], filter[1]) for filter in filters_sorted]
-        results = []
 
+        #############################################################################
+        # Adjust this part. Since results isn't an array anymore (results is either a
+        # hashmap or red black tree) we need to adjust the code accordingly.
+        #############################################################################
+        results = []
         if data_structure == 'Hashmap':
             hashmap = HashMap(size=int(data_structure_size))
             hashmap.read_csv_and_insert_into_hashmap('TMDB_movie_dataset_v11.csv')
             results = hashmap.filter(priority_filters)
+
 
         elif data_structure == "Red Black Tree":
             rbt = RedBlackTree(size=int(data_structure_size))
             rbt.read_csv_and_insert_into_tree('TMDB_movie_dataset_v11.csv')
             results = rbt.filter(priority_filters)
 
-        # Create a list of movie cards
+        #############################################################################
+        # Adjust this part and put it under each of the if statements as this part
+        # will be different if you are going thru a hashmap or a red black tree
+        #############################################################################
         movie_cards = []
         for title, data in results:
             poster_url = f"https://image.tmdb.org/t/p/w500{data['poster_path']}" if data[
