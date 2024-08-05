@@ -15,8 +15,8 @@ When running the main method you will get an image like the one below:
 
 After getting the IP address that dash uses click on that to access the web interface. This will lead you to the movie selector with an interface similar to the one below:
 
-![Screenshot 2024-08-04 230358](https://github.com/user-attachments/assets/d5b4f5cf-538c-4dc5-a2a9-d010ae2260bb)
-![Screenshot 2024-08-04 230414](https://github.com/user-attachments/assets/05a5934a-2a2d-4d83-9687-60a7e31f2160)
+![Screenshot 2024-08-04 230924](https://github.com/user-attachments/assets/026ee8d1-6b16-43e8-aa2c-c71ca9a00e28)
+![Screenshot 2024-08-04 230938](https://github.com/user-attachments/assets/4b4c67b4-cc73-400c-877b-3c67376208ff)
 
 You change change the various parameters to filter different movies based on your preferences. The most importance aspect is choosing between using the Hashmap and the Red Black Tree. This will determine how efficient each of the data structures are at filtering. Note that the Red Black Tree displays in alphabetical order where the hashmap displays in a random order.
 
