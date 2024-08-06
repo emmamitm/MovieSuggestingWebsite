@@ -243,56 +243,62 @@ class RedBlackTree:
                 count += 1
 
     def filter(self, filters_with_priorities):
+        # Start with all movies
         results = []
+        self._inorder_traversal(self.root, results)
 
-        def apply_filter(node, filter_name, filter_value):
-            if node == self.NIL:
-                return
-            apply_filter(node.left, filter_name, filter_value)
-            data = node.data
+        # Apply each filter in the order of priority
+        for filter_name, filter_value in filters_with_priorities:
             if filter_name == 'vote_average':
-                if filter_value[0] <= float(data['vote_average']) <= filter_value[1]:
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if filter_value[0] <= float(data['vote_average']) <= filter_value[1]
+                ]
             elif filter_name == 'popularity':
-                if filter_value[0] <= float(data['popularity']) <= filter_value[1]:
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if filter_value[0] <= float(data['popularity']) <= filter_value[1]
+                ]
             elif filter_name == 'revenue':
-                if (filter_value[0] * 1000000000) <= float(data['revenue']) <= (filter_value[1] * 1000000000):
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if (filter_value[0] * 1000000000) <= float(data['revenue']) <= (filter_value[1] * 1000000000)
+                ]
             elif filter_name == 'runtime':
-                if filter_value[0] <= float(data['runtime']) <= filter_value[1]:
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if filter_value[0] <= float(data['runtime']) <= filter_value[1]
+                ]
             elif filter_name == 'genres' and len(filter_value) > 0:
-                if filter_value[0].lower() in data['genres'].lower():
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if filter_value[0].lower() in data['genres'].lower()
+                ]
             elif filter_name == 'keywords' and filter_value is not None:
                 filter_keywords = [kw.strip().lower() for kw in filter_value.split(',')]
-                if any(kw in data['keywords'].lower() for kw in filter_keywords):
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if any(kw in data['keywords'].lower() for kw in filter_keywords)
+                ]
             elif filter_name == 'production_countries' and len(filter_value) > 0:
-                if filter_value[0].lower() in data['production_countries'].lower():
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if filter_value[0].lower() in data['production_countries'].lower()
+                ]
             elif filter_name == 'original_language' and filter_value is not None:
-                if filter_value[:2].lower() == data['original_language'].lower():
-                    results.append((node.key, data))
+                results = [
+                    (title, data) for title, data in results
+                    if filter_value[:2].lower() == data['original_language'].lower()
+                ]
             elif filter_name == "release_date":
                 start_year = int(filter_value[0])
                 end_year = int(filter_value[1])
-                if 'release_date' in data and data['release_date'] and start_year <= datetime.strptime(data['release_date'], '%Y-%m-%d').year <= end_year:
-                    results.append((node.key, data))
-            apply_filter(node.right, filter_name, filter_value)
+                results = [
+                    (title, data) for title, data in results
+                    if 'release_date' in data and data['release_date']
+                       and start_year <= datetime.strptime(data['release_date'], '%Y-%m-%d').year <= end_year
+                ]
 
-        for filter_name, filter_value in filters_with_priorities:
-            apply_filter(self.root, filter_name, filter_value)
-            # Update the tree to only include the filtered results
-            filtered_tree = RedBlackTree(size=self.size)
-            for key, data in results:
-                filtered_tree.insert(key, data)
-            self.root = filtered_tree.root
-            results = []
-
-        results = []
-        self._inorder_traversal(self.root, results)
         return results
 
     def _inorder_traversal(self, node, results):
