@@ -23,7 +23,7 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='rating-number', options=number_options, value=1, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.RangeSlider(id='voter-average', min=0, max=10, step=0.1, value=[6, 8],
-                            marks={i: str(i) for i in range(11)}), width=8)
+                                       marks={i: str(i) for i in range(11)}), width=8)
             ])
         ], width=8)
     ]),
@@ -33,10 +33,10 @@ app.layout = dbc.Container([
             dbc.Label('Genre:', className='mt-3 label-title', style={'margin-left': '120px'}),
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='genre-number', options=number_options, value=2, style={'margin-bottom': '20px'}), width=1),
-                dbc.Col(dcc.Dropdown(id='genre', options=[{'label': genre, 'value': genre} for genre in ["Action","Adventure",
-            "Comedy", "Drama", "Horror", "Romance", "Science Fiction", "Crime", "Thriller", "Fantasy", "Mystery",
-            "War", "Family", "Animation", "Documentary"]], value=["Action"],
-           multi=True, style={'margin-bottom': '20px'}), width=8)
+                dbc.Col(dcc.Dropdown(id='genre', options=[{'label': genre, 'value': genre} for genre in ["Action", "Adventure",
+                "Comedy", "Drama", "Horror", "Romance", "Science Fiction", "Crime", "Thriller", "Fantasy", "Mystery",
+                "War", "Family", "Animation", "Documentary"]], value=["Action"],
+                                     multi=True, style={'margin-bottom': '20px'}), width=8)
             ])
         ], width=8)
     ]),
@@ -47,7 +47,7 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='runtime-number', options=number_options, value=3, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.RangeSlider(id='runtime', min=0, max=300, step=10, value=[90, 150],
-                            marks={i: str(i) for i in range(0, 301, 30)}), width=8)
+                                       marks={i: str(i) for i in range(0, 301, 30)}), width=8)
             ])
         ], width=8)
     ]),
@@ -58,7 +58,7 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='release-date-number', options=number_options, value=4, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.RangeSlider(id='release-date', min=1950, max=2024, step=1, value=[2000, 2020],
-                            marks={i: str(i) for i in range(1950, 2025, 10)}), width=8)
+                                       marks={i: str(i) for i in range(1950, 2025, 10)}), width=8)
             ])
         ], width=8)
     ]),
@@ -69,7 +69,7 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='popularity-score-number', options=number_options, value=5, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.RangeSlider(id='popularity-score', min=0, max=200, step=1, value=[50, 150],
-                            marks={i: str(i) for i in range(0, 201, 25)}), width=8)
+                                       marks={i: str(i) for i in range(0, 201, 25)}), width=8)
             ])
         ], width=8)
     ]),
@@ -80,7 +80,7 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='revenue-number', options=number_options, value=6, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.RangeSlider(id='revenue', min=0, max=3, step=0.25, value=[0.5, 2],
-                            marks={i: f"${i}B" for i in range(0, 4)}), width=8)
+                                       marks={i: f"${i}B" for i in range(0, 4)}), width=8)
             ])
         ], width=8)
     ]),
@@ -101,8 +101,8 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='production-country-number', options=number_options, value=8, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.Dropdown(id='production-country', options=[{'label': country, 'value': country} for country in ["United States of America",
-            "United Kingdom", "New Zealand", "Canada", "Australia", "France", "Germany", "South Korea", "Japan"]], value=["United States of America"],
-                         multi=True, style={'margin-bottom': '20px'}), width=8)
+                "United Kingdom", "New Zealand", "Canada", "Australia", "France", "Germany", "South Korea", "Japan"]], value=["United States of America"],
+                                     multi=True, style={'margin-bottom': '20px'}), width=8)
             ])
         ], width=8)
     ]),
@@ -113,7 +113,7 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col(dcc.Dropdown(id='original-language-number', options=number_options, value=9, style={'margin-bottom': '20px'}), width=1),
                 dbc.Col(dcc.Dropdown(id='original-language', options=[{'label': lang, 'value': lang} for lang in ["English", "Spanish", "French", "German", "Chinese"]], value="English",
-                         style={'margin-bottom': '20px'}), width=8),
+                                     style={'margin-bottom': '20px'}), width=8),
             ])
         ], width=8)
     ]),
@@ -192,53 +192,71 @@ def update_output(n_clicks, data_structure, original_language, original_language
         filters_sorted = sorted(filters, key=lambda x: x[2])
         priority_filters = [(filter[0], filter[1]) for filter in filters_sorted]
 
-        #############################################################################
-        # Adjust this part. Since results isn't an array anymore (results is either a
-        # hashmap or red black tree) we need to adjust the code accordingly.
-        #############################################################################
         results = []
+        movie_cards = []
         if data_structure == 'Hashmap':
             hashmap = HashMap(size=int(data_structure_size))
             hashmap.read_csv_and_insert_into_hashmap('TMDB_movie_dataset_v11.csv')
             results = hashmap.filter(priority_filters)
 
+            for title, data in results:
+                poster_url = f"https://image.tmdb.org/t/p/w500{data['poster_path']}" if data[
+                    'poster_path'] else "https://via.placeholder.com/150"
+                date = (datetime.strptime(data['release_date'], "%Y-%m-%d")).strftime("%B %d, %Y")
+                rating = round(float(data['vote_average']), 1)
+                popularity = round(float(data['popularity']))
+                revenue = "{:,}".format(int(data['revenue']))
+                movie_card = dbc.Card(
+                    [
+                        dbc.CardImg(src=poster_url, top=True),
+                        dbc.CardBody(
+                            [
+                                html.H4(title, className="card-title"),
+                                html.P(f"Rating: {rating}", className="card-text"),
+                                html.P(f"Popularity: {popularity}", className="card-text"),
+                                html.P(f"Release Date: {date}", className="card-text"),
+                                html.P(f"Runtime: {data['runtime']} minutes", className="card-text"),
+                                html.P(f"Revenue: ${revenue}", className="card-text"),
+                                html.P(f"Genres: {data['genres']}", className="card-text"),
+                                html.P(f"Overview: {data['overview']}", className="card-text")
+                            ]
+                        ),
+                    ],
+                    style={"width": "18rem", "margin": "10px"}
+                )
+                movie_cards.append(movie_card)
 
         elif data_structure == "Red Black Tree":
             rbt = RedBlackTree(size=int(data_structure_size))
             rbt.read_csv_and_insert_into_tree('TMDB_movie_dataset_v11.csv')
             results = rbt.filter(priority_filters)
 
-        #############################################################################
-        # Adjust this part and put it under each of the if statements as this part
-        # will be different if you are going thru a hashmap or a red black tree
-        #############################################################################
-        movie_cards = []
-        for title, data in results:
-            poster_url = f"https://image.tmdb.org/t/p/w500{data['poster_path']}" if data[
-                'poster_path'] else "https://via.placeholder.com/150"
-            date = (datetime.strptime(data['release_date'], "%Y-%m-%d")).strftime("%B %d, %Y")
-            rating = round(float(data['vote_average']), 1)
-            popularity = round(float(data['popularity']))
-            revenue = "{:,}".format(int(data['revenue']))
-            movie_card = dbc.Card(
-                [
-                    dbc.CardImg(src=poster_url, top=True),
-                    dbc.CardBody(
-                        [
-                            html.H4(title, className="card-title"),
-                            html.P(f"Rating: {rating}", className="card-text"),
-                            html.P(f"Popularity: {popularity}", className="card-text"),
-                            html.P(f"Release Date: {date}", className="card-text"),
-                            html.P(f"Runtime: {data['runtime']} minutes", className="card-text"),
-                            html.P(f"Revenue: ${revenue}", className="card-text"),
-                            html.P(f"Genres: {data['genres']}", className="card-text"),
-                            html.P(f"Overview: {data['overview']}", className="card-text")
-                        ]
-                    ),
-                ],
-                style={"width": "18rem", "margin": "10px"}
-            )
-            movie_cards.append(movie_card)
+            for title, data in results:
+                poster_url = f"https://image.tmdb.org/t/p/w500{data['poster_path']}" if data[
+                    'poster_path'] else "https://via.placeholder.com/150"
+                date = (datetime.strptime(data['release_date'], "%Y-%m-%d")).strftime("%B %d, %Y")
+                rating = round(float(data['vote_average']), 1)
+                popularity = round(float(data['popularity']))
+                revenue = "{:,}".format(int(data['revenue']))
+                movie_card = dbc.Card(
+                    [
+                        dbc.CardImg(src=poster_url, top=True),
+                        dbc.CardBody(
+                            [
+                                html.H4(title, className="card-title"),
+                                html.P(f"Rating: {rating}", className="card-text"),
+                                html.P(f"Popularity: {popularity}", className="card-text"),
+                                html.P(f"Release Date: {date}", className="card-text"),
+                                html.P(f"Runtime: {data['runtime']} minutes", className="card-text"),
+                                html.P(f"Revenue: ${revenue}", className="card-text"),
+                                html.P(f"Genres: {data['genres']}", className="card-text"),
+                                html.P(f"Overview: {data['overview']}", className="card-text")
+                            ]
+                        ),
+                    ],
+                    style={"width": "18rem", "margin": "10px"}
+                )
+                movie_cards.append(movie_card)
 
         num_results = len(results)
         return html.Div([
